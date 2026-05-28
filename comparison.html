@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Flowchart — MeetBean for Stratagraph</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            dark: { 900: '#1E1D1D', 800: '#1E1E24', 700: '#343E3F', 600: '#40424D' },
+            brand: { DEFAULT: '#70A593', light: '#9CC9BB', dark: '#508875' },
+          },
+        },
+      },
+    };
+  </script>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#70A593',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#508875',
+        lineColor: '#64748b',
+        secondaryColor: '#1E1E24',
+        tertiaryColor: '#f1f5f9',
+        fontSize: '13px',
+        fontFamily: 'Inter, sans-serif',
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: 'basis',
+        padding: 16,
+        nodeSpacing: 30,
+        rankSpacing: 40,
+        useMaxWidth: false,
+      },
+    });
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    nav.scrolled { box-shadow: 0 2px 16px 0 rgba(30,29,29,0.10); }
+
+    .mermaid-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    .mermaid-wrap svg {
+      display: inline-block;
+      max-width: none !important;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- NAV -->
+  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm transition-shadow duration-300">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center">
+        <img src="assets/images/meetbean-logo-dark.svg" alt="meetBean" class="h-5" />
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="index.html" class="hover:text-brand transition-colors">Comparison</a>
+        <a href="comparison.html" class="text-brand font-semibold">Process Flow</a>
+      </div>
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden border-t border-gray-100 bg-white/95 px-6 py-4 flex flex-col gap-3 text-sm font-medium text-gray-600">
+      <a href="index.html" class="hover:text-brand">Comparison</a>
+      <a href="comparison.html" class="text-brand font-semibold">Process Flow</a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="relative text-white pt-32 pb-16 overflow-hidden" style="background: linear-gradient(135deg, #1E1D1D 0%, #1E1E24 40%, #243330 100%);">
+    <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><line x1=%220%22 y1=%2260%22 x2=%2260%22 y2=%220%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>'); background-size: 60px 60px;"></div>
+    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px]"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <p class="fade-in text-brand-light text-sm font-medium tracking-widest uppercase mb-4">Process Flowchart</p>
+      <h1 class="fade-in text-4xl md:text-5xl font-bold leading-tight mb-4" style="transition-delay:0.1s">Life Cycle of a Job</h1>
+      <p class="fade-in text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto" style="transition-delay:0.2s">
+        Every persona, decision, alert, and handoff in Stratagraph's operations — from new customer to paid invoice.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- LEGEND -->
+  <section class="py-8 bg-gray-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="fade-in flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-medium">
+        <span class="text-gray-500 uppercase tracking-wider mr-2">Personas:</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#3B82F6"></span> Sales Rep</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#7C3AED"></span> Ashby</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#F59E0B"></span> Operations</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#10B981"></span> Finance</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#F97316"></span> Logger</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#EC4899"></span> Customer / Co. Man</span>
+        <span class="text-gray-300 mx-1">|</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#64748b"></span> System Auto</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm border border-amber-400" style="background:#FEF3C7"></span> Decision</span>
+        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#EF4444"></span> SLA / Alert</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FLOWCHART -->
+  <section class="py-12 bg-white">
+    <div class="max-w-[100rem] mx-auto px-4">
+
+      <div class="mermaid-wrap fade-in">
+        <pre class="mermaid">
+graph TD
+
+  classDef sales fill:#3B82F6,stroke:#2563EB,color:#fff,font-weight:600
+  classDef ashby fill:#7C3AED,stroke:#6D28D9,color:#fff,font-weight:600
+  classDef ops fill:#F59E0B,stroke:#D97706,color:#fff,font-weight:600
+  classDef finance fill:#10B981,stroke:#059669,color:#fff,font-weight:600
+  classDef system fill:#64748b,stroke:#475569,color:#fff,font-weight:600
+  classDef customer fill:#EC4899,stroke:#DB2777,color:#fff,font-weight:600
+  classDef logger fill:#F97316,stroke:#EA580C,color:#fff,font-weight:600
+  classDef decision fill:#FEF3C7,stroke:#D97706,color:#92400E,font-weight:600
+  classDef sla fill:#EF4444,stroke:#B91C1C,color:#fff,font-weight:700
+  classDef alert fill:#FEE2E2,stroke:#EF4444,color:#991B1B,font-weight:600
+
+  START(["🟢 NEW JOB REQUEST"]):::system
+
+  subgraph P1["&nbsp; PHASE 1 — NEW CUSTOMER &nbsp;"]
+    direction TB
+    S1["Sales Rep: Enter CRM info<br/><i>expenses, meetings, bid prep</i>"]:::sales
+    S2["Sales Rep: Create bid<br/>in customer folder"]:::sales
+    SYS1["⚡ System alerts Ashby<br/>for bid review"]:::system
+    D1{"Ashby: Approve<br/>bid?"}:::decision
+    ADJ["Ashby + Jameson:<br/>Adjust bid"]:::ashby
+    LOCK["✅ Bid approved & locked<br/><i>Sales Rep loses edit access</i>"]:::ashby
+    SYS2["⚡ System alerts Sales Rep"]:::system
+    S3["Sales Rep: Send bid<br/>to Customer"]:::sales
+    CUST1["Customer: Approve bid"]:::customer
+    S4["Sales Rep: Mark<br/>bid complete"]:::sales
+    S5["Sales Rep: Upload MSA<br/>to system folder"]:::sales
+    SYS3["⚡ System alerts Ashby<br/>to review & sign MSA"]:::system
+    A1["Ashby: Sign MSA"]:::ashby
+    SYS4["⚡ System alerts Finance"]:::system
+    F1["Finance: Upload<br/>COI & W9"]:::finance
+    SYS5["⚡ System alerts Sales Rep<br/>MSA, COI, W9 ready"]:::system
+    S6["Sales Rep: Send docs<br/>to Customer"]:::sales
+    S7["Sales Rep: Enter all<br/>customer billing info<br/><i>Legal name, billing addr, invoice<br/>method, AP contact, PO/AFE reqs</i>"]:::sales
+    SYS6["⚡ System alerts Finance<br/>new customer ready"]:::system
+    F2["Finance: Set up ACH<br/>& invoice portal linking"]:::finance
+  end
+
+  subgraph P2["&nbsp; PHASE 2 — WORK IS ORDERED &nbsp;"]
+    direction TB
+    S8["Sales Rep: Create work order<br/><i>Well, API, AFE, rig, spud date, site<br/>constraints, HSE, samples, services+prices</i>"]:::sales
+    S9["Sales Rep: Submit<br/>work order"]:::sales
+    D2{"Prices match<br/>approved bid?"}:::decision
+    ALERT1["🚨 Alert Finance & Ashby:<br/>Price mismatch"]:::alert
+    D3{"Ashby: Approve<br/>mismatch?"}:::decision
+    SYS7["⚡ System alerts Operations<br/>to take over"]:::system
+    D4{"Start date<br/>changed?"}:::decision
+    ALERT2["🚨 Alert Operations:<br/>Date change"]:::alert
+    O1["Operations: Add job details<br/><i>Job #, unit, motel, crew,<br/>mileage, transport, equipment</i>"]:::ops
+    O2["Operations: Mark<br/>ready to deploy"]:::ops
+    SYS8["⚡ System: Add to<br/>upcoming jobs snapshot"]:::system
+  end
+
+  subgraph P3["&nbsp; PHASE 3 — READY TO DEPLOY &nbsp;"]
+    direction TB
+    O3["Operations: Deploy<br/>loggers & units"]:::ops
+    O4["Operations: Validate &<br/>update work order"]:::ops
+    O5["Operations: Mark<br/>work order ACTIVE"]:::ops
+    SYS9["⚡ System alerts:<br/>Ashby, Sales Rep, Finance, Ops"]:::system
+    SYS10["⚡ System creates<br/>field ticket"]:::system
+  end
+
+  subgraph P4["&nbsp; PHASE 4 — JOB IS ACTIVE &nbsp;"]
+    direction TB
+    O6["Operations: Update field ticket<br/>DAILY<br/><i>Depth, crew names, services</i>"]:::ops
+    SYS11["⚡ System: Daily revenue/cost<br/>report to Ashby & Finance<br/><i>Running totals across all jobs</i>"]:::system
+    D5{"Scope change<br/>needed?"}:::decision
+    SC["Approve & document<br/>mid-job additions<br/><i>Extra XRF, extended logging, etc.</i>"]:::ops
+  end
+
+  subgraph P5["&nbsp; PHASE 5 — JOB READY TO TD &nbsp;"]
+    direction TB
+    O7["Operations: Add end-of-job info<br/><i>Final motel, mileage calcs</i>"]:::ops
+    O8["Operations: Validate<br/>final field ticket"]:::ops
+    O9["Operations: Mark<br/>job completed"]:::ops
+    SYS12["⚡ System alerts<br/>Ashby & Finance"]:::system
+    F3["Finance: Final accuracy<br/>validation"]:::finance
+    F4["Finance: Mark<br/>ready to sign"]:::finance
+    SYS13["⚡ System alerts Ops:<br/>send ticket for signature"]:::system
+    O10["Operations: Send ticket<br/>to rig"]:::ops
+    L1["Logger: Print ticket<br/>& get Co. Man signature"]:::logger
+    CM["Company Man:<br/>Sign field ticket"]:::customer
+    L2["Logger: Scan & return<br/>signed ticket"]:::logger
+    SYS14["⚡ System alerts:<br/>Ops, Finance & Ashby"]:::system
+    SLA1["⏱️ 48-HOUR SLA<br/>TD → Signed Ticket"]:::sla
+  end
+
+  subgraph P6["&nbsp; PHASE 6 — TICKET → INVOICE &nbsp;"]
+    direction TB
+    F5["Finance: Create invoice<br/>in QuickBooks"]:::finance
+    F6["Finance: Submit invoice<br/><i>Open Invoice, Ariba, email, etc.</i>"]:::finance
+    F7["Finance: Mark<br/>invoice submitted"]:::finance
+    F8["Finance: DAILY portal<br/>status checks"]:::finance
+    D6{"Invoice<br/>status?"}:::decision
+    DISP["Finance: Resubmit<br/>disputed invoice"]:::finance
+    APPR["Invoice approved<br/>& payment received"]:::finance
+    F9["Finance: Mark paid<br/>& close job"]:::finance
+    SLA2["⏱️ 48-HOUR SLA<br/>Signed Ticket → Invoice"]:::sla
+    DONE(["✅ JOB CLOSED"]):::system
+  end
+
+  %% ===== CONNECTIONS =====
+
+  START --> S1
+
+  S1 --> S2 --> SYS1 --> D1
+  D1 -->|"No"| ADJ --> D1
+  D1 -->|"Yes"| LOCK --> SYS2 --> S3 --> CUST1 --> S4
+  S4 --> S5 --> SYS3 --> A1 --> SYS4 --> F1 --> SYS5 --> S6
+  S6 --> S7 --> SYS6 --> F2
+
+  F2 --> S8
+  S8 --> S9 --> D2
+  D2 -->|"Yes"| SYS7
+  D2 -->|"No"| ALERT1 --> D3
+  D3 -->|"Approved"| SYS7
+  D3 -->|"Denied"| S8
+  SYS7 --> D4
+  D4 -->|"Yes"| ALERT2 --> O1
+  D4 -->|"No"| O1
+  O1 --> O2 --> SYS8
+
+  SYS8 --> O3
+  O3 --> O4 --> O5 --> SYS9
+  SYS9 --> SYS10
+
+  SYS10 --> O6
+  O6 --> SYS11
+  SYS11 --> D5
+  D5 -->|"Yes"| SC --> O6
+  D5 -->|"No / Continue"| O7
+
+  O7 --> O8 --> O9 --> SYS12
+  SYS12 --> F3 --> F4 --> SYS13
+  SYS13 --> O10 --> L1 --> CM --> L2 --> SYS14
+  SLA1 -.->|"Breach → Alert<br/>Ashby, Finance, Ops"| SYS14
+
+  SYS14 --> F5
+  SLA2 -.->|"Breach → Alert<br/>Ashby & Finance"| F7
+  F5 --> F6 --> F7 --> F8 --> D6
+  D6 -->|"Disputed"| DISP --> F8
+  D6 -->|"Processing"| F8
+  D6 -->|"Approved/Paid"| APPR --> F9 --> DONE
+        </pre>
+      </div>
+
+      <!-- SLA Callout -->
+      <div class="fade-in mt-8 max-w-4xl mx-auto bg-red-50 border border-red-200 rounded-2xl p-6">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-sm mb-1">48-Hour SLA Windows</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Two critical SLA windows are enforced: <strong>Job TD to signed field ticket returned</strong> and <strong>signed ticket receipt to invoice submission</strong>.
+              System alerts go to Ashby, Finance, and Operations if either 48-hour window is breached.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Existing Customer Note -->
+      <div class="fade-in mt-4 max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-6">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-sm mb-1">Existing Customers</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              For repeat work with an existing customer, the process skips Phase 1 and starts directly at Phase 2 — Work Is Ordered.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-dark-900 text-gray-300 py-8">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <a href="index.html"><img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-5" /></a>
+      <span class="text-gray-400">Confidential &mdash; Prepared for Stratagraph &middot; May 2026</span>
+      <span class="text-gray-500">&copy; 2026 MeetBean</span>
+    </div>
+  </footer>
+
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function() {
+        var svg = document.querySelector('.mermaid svg');
+        if (svg) {
+          var bbox = svg.getBBox();
+          var pad = 20;
+          svg.setAttribute('viewBox',
+            (bbox.x - pad) + ' ' + (bbox.y - pad) + ' ' +
+            (bbox.width + pad * 2) + ' ' + (bbox.height + pad * 2));
+          svg.style.width = (bbox.width + pad * 2) + 'px';
+          svg.style.height = (bbox.height + pad * 2) + 'px';
+        }
+      }, 2000);
+
+      var fadeObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.fade-in').forEach(function (el) { fadeObserver.observe(el); });
+
+      var nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+    });
+  </script>
+
+</body>
+</html>
