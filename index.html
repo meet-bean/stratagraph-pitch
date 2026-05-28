@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeetBean for Stratagraph</title>
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            dark: {
+              900: '#1E1D1D',
+              800: '#1E1E24',
+              700: '#343E3F',
+              600: '#40424D',
+            },
+            brand: {
+              DEFAULT: '#70A593',
+              light: '#9CC9BB',
+              dark: '#508875',
+            },
+            accent: {
+              green: '#22c55e',
+              amber: '#f59e0b',
+              red: '#ef4444',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Nav shadow on scroll */
+    nav.scrolled {
+      box-shadow: 0 2px 16px 0 rgba(30, 29, 29, 0.10);
+    }
+
+    /* Bar chart fill animation */
+    .bar-fill {
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Feature detail rows */
+    .detail-row {
+      display: none;
+    }
+    .detail-row.expanded {
+      display: table-row;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- =========================================================
+       STICKY NAV
+  ========================================================= -->
+  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm transition-shadow duration-300">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#hero" class="flex items-center">
+        <img src="assets/images/meetbean-logo-dark.svg" alt="meetBean" class="h-5" />
+      </a>
+
+      <!-- Nav links -->
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="#features" class="nav-link hover:text-brand transition-colors">Features</a>
+        <a href="#support" class="nav-link hover:text-brand transition-colors">Support</a>
+        <a href="#cost" class="nav-link hover:text-brand transition-colors">Cost</a>
+        <a href="#design" class="nav-link hover:text-brand transition-colors">Design</a>
+        <a href="#why" class="nav-link hover:text-brand transition-colors">Why MeetBean</a>
+      </div>
+
+      <!-- Mobile menu button (visible on small screens) -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-gray-100 bg-white/95 px-6 py-4 flex flex-col gap-3 text-sm font-medium text-gray-600">
+      <a href="#features" class="hover:text-brand">Features</a>
+      <a href="#support" class="hover:text-brand">Support</a>
+      <a href="#cost" class="hover:text-brand">Cost</a>
+      <a href="#design" class="hover:text-brand">Design</a>
+      <a href="#why" class="hover:text-brand">Why MeetBean</a>
+    </div>
+  </nav>
+
+
+  <!-- =========================================================
+       HERO SECTION
+  ========================================================= -->
+  <section id="hero" class="relative text-white pt-32 pb-20 overflow-hidden" style="background: linear-gradient(135deg, #1E1D1D 0%, #1E1E24 40%, #243330 100%);">
+    <!-- Subtle grid overlay -->
+    <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><line x1=%220%22 y1=%2260%22 x2=%2260%22 y2=%220%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>'); background-size: 60px 60px;"></div>
+    <!-- Glow accent -->
+    <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px]"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <p class="fade-in text-brand-light text-sm font-medium tracking-widest uppercase mb-6">
+          Prepared for Stratagraph
+        </p>
+
+        <h1 class="fade-in text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.15] mb-6" style="transition-delay:0.1s">
+          They are consultants,<br><span class="text-brand-light">we build tech.</span>
+        </h1>
+
+        <p class="fade-in text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto mb-10" style="transition-delay:0.2s">
+          A purpose-built digital operations platform designed around how Stratagraph works — expert support, transparent pricing, zero renegotiation surprises.
+        </p>
+
+      </div>
+
+      <!-- Product screenshot — centered, floating -->
+      <div class="fade-in relative max-w-4xl mx-auto" style="transition-delay:0.4s">
+        <div class="rounded-xl overflow-hidden shadow-2xl shadow-black/50 border border-white/10">
+          <img src="assets/images/Screenshots/meetbean-jobs-dashboard.png" alt="MeetBean Active Jobs Dashboard" class="w-full">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       FEATURE COMPARISON SECTION
+  ========================================================= -->
+  <section id="features" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Section header -->
+      <div class="fade-in text-center mb-12">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">Side-by-Side</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-3">Feature Comparison</h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">
+          Every capability mapped across all three proposals. Toggle the full breakdown to see feature-level detail.
+        </p>
+      </div>
+
+      <!-- Table card -->
+      <div class="fade-in overflow-visible rounded-2xl border border-gray-200 shadow-sm">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-4 px-5 font-semibold text-gray-700 w-1/3 bg-gray-50">Scope</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Digineox</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Zyntergy</th>
+              <th class="text-center py-4 px-4 font-semibold text-white bg-brand-dark">
+                <img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-4 mx-auto" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ── Functional & Integration Scope ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('functional', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Functional &amp; Integration Scope
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">Included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">Free</td>
+            </tr>
+            <!-- Detail rows: Functional -->
+            <tr class="detail-row" data-group="functional">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Working prototype</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">✅ Completed</td>
+            </tr>
+            <tr class="detail-row" data-group="functional">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Discovery sessions</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">✅ Completed</td>
+            </tr>
+            <tr class="detail-row" data-group="functional">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Solution architecture</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">✅ Completed</td>
+            </tr>
+
+            <!-- ── Core Job Tracking ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('job', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Core Job Tracking
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">Included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$35,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">Included</td>
+            </tr>
+            <!-- Detail rows: Job -->
+            <tr class="detail-row" data-group="job">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Order management</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="job">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Crew &amp; equipment scheduling</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="job">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Job execution</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="job">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Operational dashboards</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="job">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Executive dashboards</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+
+            <!-- ── Field Operations ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('field', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Field Operations
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">Included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$23,000</td>
+              <td class="py-3 px-4 text-center text-brand bg-emerald-50">2 of 3 Features</td>
+            </tr>
+            <!-- Detail rows: Field -->
+            <tr class="detail-row" data-group="field">
+              <td class="py-2 px-5 pl-12 text-gray-400 bg-gray-100/80 text-xs line-through italic">Employee geofenced time tracking <span class="text-[10px] no-underline text-gray-400 ml-1">(out of scope)</span></td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+            </tr>
+            <tr class="detail-row" data-group="field">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Digitized SOPs</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">⚙️ Additional Module</td>
+            </tr>
+            <tr class="detail-row" data-group="field">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Digital field tickets</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="field">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Shift management (availability based on certifications)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+
+            <!-- ── Accounts, Docs & Master Data ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('accounts', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Accounts, Docs &amp; Master Data
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">Included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">Included</td>
+            </tr>
+            <!-- Detail rows: Accounts -->
+            <tr class="detail-row" data-group="accounts">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Document repository</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="accounts">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Master data management (operators, wells, crews, units)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="accounts">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Microsoft SSO</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-amber">⚠️ TBD</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+
+            <!-- ── Change Mgmt & Adoption ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('change', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Change Mgmt &amp; Adoption Support
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">Included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">Included</td>
+            </tr>
+            <!-- Detail rows: Change -->
+            <tr class="detail-row" data-group="change">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Training &amp; documentation</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="change">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Change impact assessment</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">N/A</td>
+            </tr>
+            <tr class="detail-row" data-group="change">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Transformation Partner</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="change">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Communications plan</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="change">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Go-live support</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">✅</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+
+            <!-- ── Integrations ── -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('integrations', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Integrations / APIs
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-brand bg-emerald-50 relative">3 of 4 Features<span class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+12px)] text-[11px] font-semibold text-white bg-brand px-3 py-1 rounded-full whitespace-nowrap shadow-md">3 new items</span></td>
+            </tr>
+            <!-- Detail rows: Integrations -->
+            <tr class="detail-row" data-group="integrations">
+              <td class="py-2 px-5 pl-12 text-gray-400 bg-gray-100/80 text-xs line-through italic">QuickBooks / Integration <span class="text-[10px] no-underline text-gray-400 ml-1">(out of scope)</span></td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center bg-gray-100/80 text-xs text-gray-400">—</td>
+            </tr>
+            <tr class="detail-row" data-group="integrations">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">ISN (Certifications)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">🔗 Additional Integration</td>
+            </tr>
+            <tr class="detail-row" data-group="integrations">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">QuickBooks (CSV export)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">✅</td>
+            </tr>
+            <tr class="detail-row" data-group="integrations">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">CRM / SharePoint (Ingestion: Existing platform fields)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs relative">✅<span class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+12px)] text-[11px] font-semibold text-white bg-brand px-3 py-1 rounded-full whitespace-nowrap shadow-md">Newly approved</span></td>
+            </tr>
+            <tr class="detail-row" data-group="integrations">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Public API</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-red">❌</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs relative">✅<span class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+12px)] text-[11px] font-semibold text-white bg-brand px-3 py-1 rounded-full whitespace-nowrap shadow-md">Newly approved</span></td>
+            </tr>
+
+            <!-- ── TOTAL ── -->
+            <tr class="border-t-2 border-gray-300 bg-gray-50">
+              <td class="py-4 px-5 font-bold text-gray-900 text-base">Total (Implementation)</td>
+              <td class="py-4 px-4 text-center font-bold text-gray-700">$15,000</td>
+              <td class="py-4 px-4 text-center font-bold text-gray-700">$88,000</td>
+              <td class="py-4 px-4 text-center font-bold text-brand text-base bg-emerald-50">$12,500</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Toggle button -->
+      <div class="fade-in mt-6 text-center">
+        <button
+          onclick="toggleAllDetails(this)"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-brand text-brand text-sm font-medium hover:bg-brand hover:text-white transition-colors"
+        >
+          <span>Show full breakdown</span>
+          <svg id="toggle-chevron" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       OUT-OF-SCOPE MODULES (Zyntergy Add-Ons)
+  ========================================================= -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <div class="fade-in text-center mb-10">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">Zyntergy Add-Ons</p>
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-3">Out-of-Scope Modules</h2>
+        <p class="text-gray-500 text-base max-w-xl mx-auto">
+          Zyntergy quotes five additional packages totaling $62,000. Digineox does not offer them. MeetBean's approach for each:
+        </p>
+      </div>
+
+      <div class="fade-in overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-4 px-5 font-semibold text-gray-700 bg-gray-50 w-2/5">Module</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Digineox</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Zyntergy</th>
+              <th class="text-center py-4 px-4 font-semibold text-white bg-brand-dark">
+                <img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-4 mx-auto" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- Data Feeds -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('oos-datafeeds', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Data Feeds: Enverus &amp; Rogii
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,000</td>
+              <td class="py-3 px-4 text-center text-xs text-brand font-medium bg-emerald-50">🔗 Additional Integration</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-datafeeds">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Enverus historical wells data feed</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-datafeeds">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Rogii wellbore interpretation feed</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+
+            <!-- IT Ticketing -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('oos-ticketing', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  IT Ticketing System
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$9,000</td>
+              <td class="py-3 px-4 text-center text-xs text-brand font-medium bg-emerald-50">⚙️ Additional Module</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-ticketing">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Internal IT ticket submission</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-ticketing">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Ticket tracking &amp; resolution workflow</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+
+            <!-- Customer Portal -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('oos-portal', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Customer Portal
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$12,000</td>
+              <td class="py-3 px-4 text-center text-xs text-brand font-medium bg-emerald-50">⚙️ Additional Module</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-portal">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Client-facing job status portal</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-portal">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Document sharing &amp; approvals</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+
+            <!-- AI Job Summaries -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('oos-aisummary', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  AI-Written Job Summaries
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$9,000</td>
+              <td class="py-3 px-4 text-center text-xs text-brand font-medium bg-emerald-50">⚙️ Additional Module</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-aisummary">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Auto-generated job completion reports</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-aisummary">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">AI narrative from field data</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+
+            <!-- AI Wellsite -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('oos-aiwell', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  AI Wellsite Interpretation
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-400 text-xs">Not included</td>
+              <td class="py-3 px-4 text-center text-gray-600">$23,000</td>
+              <td class="py-3 px-4 text-center text-xs text-brand font-medium bg-emerald-50">⚙️ Additional Module</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-aiwell">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Real-time wellsite data interpretation</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+            <tr class="detail-row" data-group="oos-aiwell">
+              <td class="py-2 px-5 pl-12 text-gray-500 text-xs">Automated geological recommendations</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400">—</td>
+              <td class="py-2 px-4 text-center text-xs">✅</td>
+              <td class="py-2 px-4 text-center text-xs text-gray-400 bg-emerald-50/70">—</td>
+            </tr>
+
+            <!-- Subtotal -->
+            <tr class="border-t-2 border-gray-300 bg-gray-50">
+              <td class="py-4 px-5 font-bold text-gray-900 text-base">Subtotal</td>
+              <td class="py-4 px-4 text-center font-bold text-gray-400">—</td>
+              <td class="py-4 px-4 text-center font-bold text-gray-700">$62,000</td>
+              <td class="py-4 px-4 text-center font-bold text-brand text-base bg-emerald-50">Roadmap</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       SUPPORT COMPARISON SECTION
+  ========================================================= -->
+  <section id="support" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Section header -->
+      <div class="fade-in text-center mb-12">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">Post Go-Live</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-3">Support — Post Go-Live Partnership</h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">
+          What happens after launch matters as much as what happens during it.
+        </p>
+      </div>
+
+      <!-- Support Table — full width -->
+      <div class="fade-in max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-4 px-5 font-semibold text-gray-700 bg-gray-50 w-2/5">Support Dimension</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Digineox</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Zyntergy</th>
+              <th class="text-center py-4 px-4 font-semibold text-white bg-brand-dark">
+                <img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-4 mx-auto" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-5 text-gray-700 font-medium whitespace-nowrap">Support duration</td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">⚠️</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Until adoption milestone</span>
+              </td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">⚠️</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Year 1 only</span>
+              </td>
+              <td class="py-4 px-4 text-center bg-emerald-50 whitespace-nowrap">
+                <span class="block text-sm">✅</span>
+                <span class="block text-xs text-accent-green font-semibold mt-0.5">Included</span>
+              </td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-5 text-gray-700 font-medium whitespace-nowrap">Year 2+ Support</td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">⚠️</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Unknown cost</span>
+              </td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">⚠️</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Unknown cost</span>
+              </td>
+              <td class="py-4 px-4 text-center bg-emerald-50 whitespace-nowrap">
+                <span class="block text-sm">✅</span>
+                <span class="block text-xs text-accent-green font-semibold mt-0.5">Included</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="py-4 px-5 text-gray-700 font-medium whitespace-nowrap">Transformation Partner</td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">❌</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Not offered</span>
+              </td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="block text-sm">❌</span>
+                <span class="block text-xs text-gray-500 mt-0.5">Not offered</span>
+              </td>
+              <td class="py-4 px-4 text-center bg-emerald-50 whitespace-nowrap">
+                <span class="block text-sm">✅</span>
+                <span class="block text-xs text-accent-green font-semibold mt-0.5">Included</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Transformation Partner callout — centered below -->
+      <div class="fade-in max-w-2xl mx-auto bg-white rounded-2xl shadow-md p-6 relative overflow-hidden">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-brand/10 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7
+                   20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002
+                   0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014
+                   0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-gray-900 text-base mb-1">What is a Transformation Partner?</h3>
+            <p class="text-gray-600 text-sm leading-relaxed mb-3">
+              We'll pair you with a product expert who learns your business, then builds a software roadmap designed to hit your goals faster.
+            </p>
+            <ul class="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-600">
+              <li class="flex items-start gap-2">
+                <span class="text-accent-green mt-0.5">✓</span>
+                Continuous adoption coaching
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-green mt-0.5">✓</span>
+                Process optimization reviews
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-green mt-0.5">✓</span>
+                Quarterly business reviews
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-accent-green mt-0.5">✓</span>
+                Included every year — no extras
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       COST COMPARISON SECTION
+  ========================================================= -->
+  <section id="cost" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Section header -->
+      <div class="fade-in text-center mb-12">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">Total Cost of Ownership</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-3">3-Year Cost Comparison</h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">
+          Platform fees, support, and the full picture — over 3 years.
+        </p>
+      </div>
+
+      <!-- Bar chart -->
+      <div class="fade-in bar-chart bg-gray-50 rounded-2xl p-8 mb-10">
+        <div class="space-y-6">
+
+          <!-- Zyntergy -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-gray-700">Zyntergy</span>
+              <span class="text-sm font-bold text-gray-700">$128,000</span>
+            </div>
+            <div class="h-8 bg-gray-200 rounded-full overflow-hidden">
+              <div class="bar-fill h-full bg-gray-400 rounded-full flex items-center pl-3"
+                   style="width: 0" data-width="100%">
+              </div>
+            </div>
+          </div>
+
+          <!-- MeetBean -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <img src="assets/images/meetbean-logo-dark.svg" alt="meetBean" class="h-4" />
+              <span class="text-sm font-bold text-brand">$50,000</span>
+            </div>
+            <div class="h-8 bg-emerald-100 rounded-full overflow-hidden">
+              <div class="bar-fill h-full bg-brand rounded-full flex items-center pl-3"
+                   style="width: 0" data-width="39%">
+              </div>
+            </div>
+          </div>
+
+          <!-- Digineox -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-semibold text-gray-600">Digineox</span>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-gray-600">$35,300</span>
+                <span class="text-xs bg-amber-100 text-accent-amber px-2 py-0.5 rounded-full font-medium">
+                  + unknown support
+                </span>
+              </div>
+            </div>
+            <div class="h-8 bg-gray-100 rounded-full overflow-hidden">
+              <div class="bar-fill h-full bg-gray-300 rounded-full flex items-center pl-3"
+                   style="width: 0" data-width="28%">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Per-year breakdown table -->
+      <div class="fade-in overflow-x-auto rounded-2xl border border-gray-200 shadow-sm mb-8">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-4 px-5 font-semibold text-gray-700 bg-gray-50 w-2/5">Cost per Year</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Digineox</th>
+              <th class="text-center py-4 px-4 font-semibold text-gray-600 bg-gray-50">Zyntergy</th>
+              <th class="text-center py-4 px-4 font-semibold text-white bg-brand-dark">
+                <img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-4 mx-auto" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- Year 1 -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('cost-y1', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Year 1
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">$15,000</td>
+              <td class="py-3 px-4 text-center text-gray-600">$88,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">$25,000</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y1">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Software (one-time)</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$15,000</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$88,000</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y1">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Annual fee</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-brand font-medium">Waived</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-brand font-medium">Waived</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y1">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Support</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">Included</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">Included</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">Included</td>
+            </tr>
+
+            <!-- Year 2 -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('cost-y2', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Year 2
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,000</td>
+              <td class="py-3 px-4 text-center text-gray-600">$20,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y2">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Annual fee</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$10,000</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$20,000</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y2">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Support</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-amber">⚠️ Unknown</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-amber">⚠️ Unknown</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">Included</td>
+            </tr>
+
+            <!-- Year 3 -->
+            <tr class="border-b border-gray-100 bg-emerald-50/30 hover:bg-emerald-50/60 transition-colors cursor-pointer"
+                onclick="toggleGroupDetails('cost-y3', this)">
+              <td class="py-3 px-5 font-medium text-gray-800">
+                <span class="flex items-center gap-2">
+                  <svg class="toggle-icon w-4 h-4 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  Year 3
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center text-gray-600">$10,300</td>
+              <td class="py-3 px-4 text-center text-gray-600">$20,000</td>
+              <td class="py-3 px-4 text-center font-semibold text-brand bg-emerald-50">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y3">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Annual fee</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$10,300</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs">$20,000</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs">$12,500</td>
+            </tr>
+            <tr class="detail-row" data-group="cost-y3">
+              <td class="py-2 px-5 pl-12 text-gray-500 bg-gray-50/50 text-xs">Support</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-amber">⚠️ Unknown</td>
+              <td class="py-2 px-4 text-center bg-gray-50/50 text-xs text-accent-amber">⚠️ Unknown</td>
+              <td class="py-2 px-4 text-center bg-emerald-50/70 text-xs text-brand font-medium">Included</td>
+            </tr>
+
+            <!-- 3-Year Total -->
+            <tr class="border-t-2 border-gray-300 bg-gray-50">
+              <td class="py-4 px-5 font-bold text-gray-900 text-base">3-Year Total</td>
+              <td class="py-4 px-4 text-center font-bold text-gray-700">
+                $35,300
+                <span class="block text-xs font-normal text-accent-amber mt-0.5">+ unknown support</span>
+              </td>
+              <td class="py-4 px-4 text-center font-bold text-gray-700">
+                $128,000
+                <span class="block text-xs font-normal text-accent-amber mt-0.5">+ unknown support</span>
+              </td>
+              <td class="py-4 px-4 text-center font-bold text-brand text-base bg-emerald-50">
+                $50,000
+                <span class="block text-xs font-normal text-brand mt-0.5">support included</span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Amber callout -->
+      <div class="fade-in bg-amber-50 border border-accent-amber/30 rounded-2xl p-6">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-accent-amber/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+            <svg class="w-4 h-4 text-accent-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732
+                   4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-sm mb-1">A note on Digineox pricing</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">
+              Digineox is the cheapest option on paper — but their Year 2+ support cost is undisclosed.
+              Given that support from Digineox is scoped only until an "adoption milestone," ongoing costs
+              are a real and unquantified risk. MeetBean's $50K over 3 years includes full support
+              every single year, with no surprises.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       DESIGN COMPARISON SECTION
+  ========================================================= -->
+  <section id="design" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <!-- Section header -->
+      <div class="fade-in text-center mb-12">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">User Experience</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-3">Design Comparison</h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">
+          The interface your team will use every day.
+        </p>
+      </div>
+
+      <!-- Vendor Tabs -->
+      <div class="fade-in">
+        <div class="flex justify-center gap-2 mb-8" id="design-tabs">
+          <button onclick="switchDesignTab('meetbean')" data-tab="meetbean"
+            class="design-tab px-6 py-2.5 rounded-full text-sm font-semibold transition-colors bg-brand text-white">
+            MeetBean
+          </button>
+          <button onclick="switchDesignTab('digineox')" data-tab="digineox"
+            class="design-tab px-6 py-2.5 rounded-full text-sm font-semibold transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300">
+            Digineox
+          </button>
+        </div>
+
+        <!-- Carousel container -->
+        <div class="relative">
+
+          <!-- MeetBean carousel -->
+          <div id="carousel-meetbean" class="design-carousel">
+            <div class="bg-white rounded-2xl shadow-sm border border-brand/20 ring-2 ring-brand/10 overflow-hidden">
+              <img id="meetbean-slide" src="assets/images/Screenshots/meetbean-jobs-dashboard.png" alt="MeetBean UI" class="w-full">
+            </div>
+            <div class="flex items-center justify-between mt-4">
+              <button onclick="carouselPrev('meetbean')" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+              </button>
+              <div class="text-center">
+                <p id="meetbean-caption" class="text-sm font-medium text-gray-700">Active Jobs</p>
+                <div class="flex gap-1.5 justify-center mt-2" id="meetbean-dots"></div>
+              </div>
+              <button onclick="carouselNext('meetbean')" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Digineox carousel -->
+          <div id="carousel-digineox" class="design-carousel" style="display:none">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <img id="digineox-slide" src="assets/images/digineox-ui-1.png" alt="Digineox UI" class="w-full">
+            </div>
+            <div class="flex items-center justify-between mt-4">
+              <button onclick="carouselPrev('digineox')" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+              </button>
+              <div class="text-center">
+                <p id="digineox-caption" class="text-sm font-medium text-gray-500">Prototype Screen 1</p>
+                <div class="flex gap-1.5 justify-center mt-2" id="digineox-dots"></div>
+              </div>
+              <button onclick="carouselNext('digineox')" class="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       WHY MEETBEAN SECTION
+  ========================================================= -->
+  <section id="why" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="fade-in text-center mb-14">
+        <p class="text-brand text-sm font-semibold tracking-widest uppercase mb-2">Why Us</p>
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Why Are We Better</h2>
+        <p class="text-gray-600 text-lg max-w-xl mx-auto">Consultants deliver projects. We ship products.</p>
+      </div>
+
+      <div class="fade-in grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Better Team -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg shadow-gray-900/[0.06]">
+          <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Better Team</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            10-20 years each shipping products at scale.
+          </p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Consumer apps with millions of users
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Enterprise platforms in complex environments
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Experience turning business problems into software
+            </li>
+          </ul>
+        </div>
+
+        <!-- Better Product -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg shadow-gray-900/[0.06]">
+          <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Better Product</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Carefully designed so people want to use it.
+          </p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Clean design, intuitive workflows
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Modern UI that reduces training time
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Designed to scale into your single operating system
+            </li>
+          </ul>
+        </div>
+
+        <!-- Better Support -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg shadow-gray-900/[0.06]">
+          <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0
+                   01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622
+                   5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Better Support</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Continuous support throughout our partnership.
+          </p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Assigned Transformation Partner
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              We learn your business and design software around it
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-brand mt-0.5">&#10003;</span>
+              Included in every annual fee
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================================================
+       WHAT HAPPENS NEXT
+  ========================================================= -->
+  <section class="py-28 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="text-center mb-16">
+        <p class="fade-in text-brand text-sm font-semibold tracking-widest uppercase mb-2">Process</p>
+        <h2 class="fade-in text-4xl font-extrabold text-gray-900 mb-3" style="transition-delay:0.05s">What happens next</h2>
+        <p class="fade-in text-gray-500 text-lg max-w-xl mx-auto" style="transition-delay:0.1s">
+          Four steps from decision to go-live.
+        </p>
+      </div>
+
+      <div class="fade-in grid grid-cols-1 md:grid-cols-4 gap-6" style="transition-delay:0.15s">
+        <div class="rounded-2xl bg-white shadow-lg shadow-gray-900/[0.06] p-8 pt-7 flex flex-col relative overflow-hidden"><div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand to-brand-light"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <span class="text-brand font-bold text-sm">01</span>
+          </div>
+          <h3 class="text-gray-900 font-bold text-lg mb-2">Confirm budget &amp; approval</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Confirm budget availability and project approval before we invest time finalizing scope.</p>
+        </div>
+        <div class="rounded-2xl bg-white shadow-lg shadow-gray-900/[0.06] p-8 pt-7 flex flex-col relative overflow-hidden"><div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand to-brand-light"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <span class="text-brand font-bold text-sm">02</span>
+          </div>
+          <h3 class="text-gray-900 font-bold text-lg mb-2">Lock in features</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Align on the exact feature set together — no surprises on either side.</p>
+        </div>
+        <div class="rounded-2xl bg-white shadow-lg shadow-gray-900/[0.06] p-8 pt-7 flex flex-col relative overflow-hidden"><div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand to-brand-light"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <span class="text-brand font-bold text-sm">03</span>
+          </div>
+          <h3 class="text-gray-900 font-bold text-lg mb-2">Sign</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Once features and budget are fully aligned, we formalize the agreement.</p>
+        </div>
+        <div class="rounded-2xl bg-white shadow-lg shadow-gray-900/[0.06] p-8 pt-7 flex flex-col relative overflow-hidden"><div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand to-brand-light"></div>
+          <div class="w-11 h-11 rounded-xl bg-brand/15 flex items-center justify-center mb-5">
+            <svg class="w-5 h-5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h3 class="text-gray-900 font-bold text-lg mb-2">Build</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">We build, you test, we iterate. Go live with ongoing support included.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================= -->
+  <footer class="bg-dark-900 text-gray-300 py-8">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+      <img src="assets/images/meetbean-logo-light.svg" alt="meetBean" class="h-5" />
+      <span class="text-gray-400">Confidential &mdash; Prepared for Stratagraph &middot; May 2026</span>
+      <span class="text-gray-500">&copy; 2026 MeetBean</span>
+    </div>
+  </footer>
+
+
+  <!-- =========================================================
+       SCRIPTS
+  ========================================================= -->
+  <script>
+    // ── Mobile menu toggle ──
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+
+    // ── DOMContentLoaded: observers and nav behavior ──
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // IntersectionObserver: fade-in elements
+      const fadeObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.fade-in').forEach(function (el) {
+        fadeObserver.observe(el);
+      });
+
+      // IntersectionObserver: bar chart fill animation
+      const barObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.querySelectorAll('.bar-fill').forEach(function (bar) {
+                const targetWidth = bar.getAttribute('data-width');
+                // Small delay to ensure the transition fires after paint
+                requestAnimationFrame(function () {
+                  setTimeout(function () {
+                    bar.style.width = targetWidth;
+                  }, 80);
+                });
+              });
+              barObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      document.querySelectorAll('.bar-chart').forEach(function (el) {
+        barObserver.observe(el);
+      });
+
+      // Scroll: nav shadow
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 10) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      // Scroll: active nav link highlighting
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-link');
+      window.addEventListener('scroll', function () {
+        let current = '';
+        sections.forEach(function (section) {
+          const sectionTop = section.offsetTop - 80;
+          if (window.scrollY >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+        navLinks.forEach(function (link) {
+          link.classList.remove('text-brand');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('text-brand');
+          }
+        });
+      }, { passive: true });
+
+    });
+
+
+    // ── toggleAllDetails: master show/hide all detail rows ──
+    function toggleAllDetails(btn) {
+      const allDetails = document.querySelectorAll('.detail-row');
+      const chevron = document.getElementById('toggle-chevron');
+      const label = btn.querySelector('span');
+      const isExpanded = allDetails[0] && allDetails[0].classList.contains('expanded');
+
+      allDetails.forEach(function (row) {
+        if (isExpanded) {
+          row.classList.remove('expanded');
+        } else {
+          row.classList.add('expanded');
+        }
+      });
+
+      // Update all toggle icons
+      document.querySelectorAll('.toggle-icon').forEach(function (icon) {
+        icon.style.transform = isExpanded ? '' : 'rotate(90deg)';
+      });
+
+      if (isExpanded) {
+        label.textContent = 'Show full breakdown';
+        chevron.style.transform = '';
+      } else {
+        label.textContent = 'Hide full breakdown';
+        chevron.style.transform = 'rotate(180deg)';
+      }
+    }
+
+
+    // ── toggleGroupDetails: toggle individual group's detail rows ──
+    function toggleGroupDetails(group, headerRow) {
+      const rows = document.querySelectorAll('[data-group="' + group + '"]');
+      const icon = headerRow.querySelector('.toggle-icon');
+      const isExpanded = rows.length > 0 && rows[0].classList.contains('expanded');
+
+      rows.forEach(function (row) {
+        if (isExpanded) {
+          row.classList.remove('expanded');
+        } else {
+          row.classList.add('expanded');
+        }
+      });
+
+      if (icon) {
+        icon.style.transform = isExpanded ? '' : 'rotate(90deg)';
+      }
+    }
+
+    // ── Design Carousel ──
+    var carouselData = {
+      meetbean: {
+        slides: [
+          { src: 'assets/images/Screenshots/meetbean-jobs-dashboard.png', caption: 'Active Jobs' },
+          { src: 'assets/images/Screenshots/meetbean-jobs-list.png', caption: 'Jobs List' },
+          { src: 'assets/images/Screenshots/meetbean-job-detail.png', caption: 'Job Detail — Services' },
+          { src: 'assets/images/Screenshots/meetbean-job-completed.png', caption: 'Job Detail — Completed' },
+          { src: 'assets/images/Screenshots/meetbean-field-ticket.png', caption: 'Field Ticket' },
+          { src: 'assets/images/Screenshots/meetbean-new-bid.png', caption: 'New Bid' }
+        ],
+        current: 0
+      },
+      digineox: {
+        slides: [
+          { src: 'assets/images/digineox-ui-1.png', caption: 'All Jobs' },
+          { src: 'assets/images/digineox-ui-2.png', caption: 'Order Detail' },
+          { src: 'assets/images/digineox-ui-3.png', caption: 'Job Board' },
+          { src: 'assets/images/digineox-ui-4.png', caption: 'All Well Orders' },
+          { src: 'assets/images/digineox-ui-5.png', caption: 'Job Detail — Shift' }
+        ],
+        current: 0
+      }
+    };
+
+    function renderDots(vendor) {
+      var data = carouselData[vendor];
+      var container = document.getElementById(vendor + '-dots');
+      container.innerHTML = '';
+      data.slides.forEach(function (_, i) {
+        var dot = document.createElement('button');
+        dot.className = 'w-2 h-2 rounded-full transition-colors ' +
+          (i === data.current ? (vendor === 'meetbean' ? 'bg-brand' : 'bg-gray-500') : 'bg-gray-300');
+        dot.onclick = function () { goToSlide(vendor, i); };
+        container.appendChild(dot);
+      });
+    }
+
+    function updateSlide(vendor) {
+      var data = carouselData[vendor];
+      var slide = data.slides[data.current];
+      document.getElementById(vendor + '-slide').src = slide.src;
+      document.getElementById(vendor + '-caption').textContent = slide.caption;
+      renderDots(vendor);
+    }
+
+    function carouselNext(vendor) {
+      var data = carouselData[vendor];
+      data.current = (data.current + 1) % data.slides.length;
+      updateSlide(vendor);
+    }
+
+    function carouselPrev(vendor) {
+      var data = carouselData[vendor];
+      data.current = (data.current - 1 + data.slides.length) % data.slides.length;
+      updateSlide(vendor);
+    }
+
+    function goToSlide(vendor, index) {
+      carouselData[vendor].current = index;
+      updateSlide(vendor);
+    }
+
+    function switchDesignTab(vendor) {
+      document.querySelectorAll('.design-tab').forEach(function (tab) {
+        if (tab.getAttribute('data-tab') === vendor) {
+          tab.className = 'design-tab px-6 py-2.5 rounded-full text-sm font-semibold transition-colors bg-brand text-white';
+        } else {
+          tab.className = 'design-tab px-6 py-2.5 rounded-full text-sm font-semibold transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300';
+        }
+      });
+      document.querySelectorAll('.design-carousel').forEach(function (c) {
+        c.style.display = 'none';
+      });
+      document.getElementById('carousel-' + vendor).style.display = 'block';
+      updateSlide(vendor);
+    }
+
+    // Initialize dots on load
+    document.addEventListener('DOMContentLoaded', function () {
+      updateSlide('meetbean');
+      updateSlide('digineox');
+    });
+  </script>
+
+</body>
+</html>
