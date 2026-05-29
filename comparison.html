@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Process Flowchart — MeetBean for Stratagraph</title>
+  <title>Scope &amp; Process — MeetBean for Stratagraph</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,48 +24,107 @@
     };
   </script>
 
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'base',
-      themeVariables: {
-        primaryColor: '#70A593',
-        primaryTextColor: '#fff',
-        primaryBorderColor: '#508875',
-        lineColor: '#64748b',
-        secondaryColor: '#1E1E24',
-        tertiaryColor: '#f1f5f9',
-        fontSize: '13px',
-        fontFamily: 'Inter, sans-serif',
-      },
-      flowchart: {
-        htmlLabels: true,
-        curve: 'basis',
-        padding: 16,
-        nodeSpacing: 30,
-        rankSpacing: 40,
-        useMaxWidth: false,
-      },
-    });
-  </script>
-
   <style>
     body { font-family: 'Inter', sans-serif; }
     .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
     nav.scrolled { box-shadow: 0 2px 16px 0 rgba(30,29,29,0.10); }
 
-    .mermaid-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 2rem 0;
+    .phase-stepper {
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* Sequential per-phase columns */
+    .seq-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+    @media (max-width: 1023px) {
+      .seq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    .phase-header {
       text-align: center;
+      padding: 10px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #475569;
+      background: white;
+      border-bottom: 2px solid #1E1D1D;
+      margin-bottom: 10px;
     }
-    .mermaid-wrap svg {
+    .phase-header .pn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      border-radius: 999px;
+      background: #1E1D1D;
+      color: white;
+      margin-right: 6px;
+      font-size: 11px;
+    }
+
+    .seq-column { display: flex; flex-direction: column; gap: 8px; }
+
+    .step-card {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid;
+      border-left-width: 4px;
+      background: white;
+    }
+    .step-card.core    { background: #F0FDF4; border-color: #BBF7D0; border-left-color: #10B981; }
+    .step-card.other   { background: #FFFBEB; border-color: #FDE68A; border-left-color: #F59E0B; }
+    .step-card.outside { background: #F8FAFC; border-color: #E2E8F0; border-left-color: #94A3B8; }
+    .alert-icon { color: #DC2626; font-weight: 700; margin-right: 4px; }
+
+    .step-persona {
       display: inline-block;
-      max-width: none !important;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6B7280;
+      margin-bottom: 3px;
     }
+    .step-card.core    .step-persona { color: #065F46; }
+    .step-card.other   .step-persona { color: #92400E; }
+    .step-card.outside .step-persona { color: #475569; }
+
+    .step-body {
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: #1E1D1D;
+    }
+    .step-meta {
+      display: block;
+      font-size: 10.5px;
+      color: #6B7280;
+      margin-top: 2px;
+    }
+    .step-badge {
+      display: inline-block;
+      margin-left: 4px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    .step-badge.new { background: #DBEAFE; color: #1E40AF; }
+    .step-badge.sla { background: #FEE2E2; color: #991B1B; }
   </style>
 </head>
 <body class="bg-white text-gray-900 antialiased">
@@ -78,7 +137,7 @@
       </a>
       <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
         <a href="index.html" class="hover:text-brand transition-colors">Comparison</a>
-        <a href="comparison.html" class="text-brand font-semibold">Process Flow</a>
+        <a href="comparison.html" class="text-brand font-semibold">Scope &amp; Process</a>
       </div>
       <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,223 +158,352 @@
     <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-brand/10 blur-[120px]"></div>
 
     <div class="relative max-w-4xl mx-auto px-6 text-center">
-      <p class="fade-in text-brand-light text-sm font-medium tracking-widest uppercase mb-4">Process Flowchart</p>
-      <h1 class="fade-in text-4xl md:text-5xl font-bold leading-tight mb-4" style="transition-delay:0.1s">Life Cycle of a Job</h1>
+      <p class="fade-in text-brand-light text-sm font-medium tracking-widest uppercase mb-4">Scope &amp; Process</p>
+      <h1 class="fade-in text-4xl md:text-5xl font-bold leading-tight mb-4" style="transition-delay:0.1s">Where MeetBean fits in your job lifecycle</h1>
       <p class="fade-in text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto" style="transition-delay:0.2s">
-        Every persona, decision, alert, and handoff in Stratagraph's operations — from new customer to paid invoice.
+        Every step from new customer to paid invoice, mapped to what the MeetBean module covers, what's available as an add-on, and what stays outside the tool.
       </p>
     </div>
   </section>
 
 
-  <!-- LEGEND -->
-  <section class="py-8 bg-gray-50 border-b border-gray-200">
+  <!-- SCOPE LEGEND -->
+  <section class="py-6 bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="fade-in flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-medium">
-        <span class="text-gray-500 uppercase tracking-wider mr-2">Personas:</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#3B82F6"></span> Sales Rep</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#7C3AED"></span> Ashby</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#F59E0B"></span> Operations</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#10B981"></span> Finance</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#F97316"></span> Logger</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#EC4899"></span> Customer / Co. Man</span>
-        <span class="text-gray-300 mx-1">|</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#64748b"></span> System Auto</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm border border-amber-400" style="background:#FEF3C7"></span> Decision</span>
-        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:#EF4444"></span> SLA / Alert</span>
+      <div class="fade-in flex flex-col items-center gap-3">
+        <div class="flex flex-wrap items-center justify-center gap-3 text-xs">
+          <span class="text-gray-500 uppercase tracking-wider font-semibold">Each step is shaded by scope:</span>
+          <span class="inline-flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200" style="border-left-width:4px;border-left-color:#10B981">
+            <span class="font-semibold text-emerald-900">MeetBean — Core module</span>
+          </span>
+          <span class="inline-flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200" style="border-left-width:4px;border-left-color:#F59E0B">
+            <span class="font-semibold text-amber-900">MeetBean — Add-on</span>
+          </span>
+          <span class="inline-flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200" style="border-left-width:4px;border-left-color:#94A3B8">
+            <span class="font-semibold text-slate-700">Outside MeetBean</span>
+          </span>
+        </div>
       </div>
     </div>
   </section>
 
 
   <!-- FLOWCHART -->
-  <section class="py-12 bg-white">
+  <section class="py-10 bg-white">
     <div class="max-w-[100rem] mx-auto px-4">
 
-      <div class="mermaid-wrap fade-in">
-        <pre class="mermaid">
-graph TD
+      <!-- SEQUENTIAL PER-PHASE COLUMNS -->
+      <div class="fade-in seq-grid">
 
-  classDef sales fill:#3B82F6,stroke:#2563EB,color:#fff,font-weight:600
-  classDef ashby fill:#7C3AED,stroke:#6D28D9,color:#fff,font-weight:600
-  classDef ops fill:#F59E0B,stroke:#D97706,color:#fff,font-weight:600
-  classDef finance fill:#10B981,stroke:#059669,color:#fff,font-weight:600
-  classDef system fill:#64748b,stroke:#475569,color:#fff,font-weight:600
-  classDef customer fill:#EC4899,stroke:#DB2777,color:#fff,font-weight:600
-  classDef logger fill:#F97316,stroke:#EA580C,color:#fff,font-weight:600
-  classDef decision fill:#FEF3C7,stroke:#D97706,color:#92400E,font-weight:600
-  classDef sla fill:#EF4444,stroke:#B91C1C,color:#fff,font-weight:700
-  classDef alert fill:#FEE2E2,stroke:#EF4444,color:#991B1B,font-weight:600
+        <!-- PHASE 1 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">1</span>New Customer*</div>
+          <div class="step-card outside">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Enters lead in CRM<span class="step-meta">Expenses · meetings · contacts</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Ingest customer &amp; lead data from CRM / SharePoint<span class="step-meta">No double entry — existing platform fields pulled in</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Create bid in customer folder<span class="step-meta">Pre-populated from CRM</span></div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Ashby + Jameson + Sales</div>
+            <div class="step-body">Bid adjustment discussion (if needed)<span class="step-meta">Verbal review before Ashby approves</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Ashby</div>
+            <div class="step-body">Approves &amp; locks bid<span class="step-meta">Sales loses edit access</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Print / generate PDF of bid</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Email bid to customer</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Customer</div>
+            <div class="step-body">Approves bid<span class="step-meta">Email · call · their own portal</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Marks bid as accepted in MeetBean<span class="step-meta">Auto-creates work order · reflects in revenue reports</span></div>
+          </div>
+          <div class="step-card other">
+            <div class="step-persona">Sales · Ashby · Finance</div>
+            <div class="step-body">Onboarding docs in CRM (MSA / COI / W9)<span class="step-meta">Sales uploads MSA → Ashby e-signs → Finance adds COI &amp; W9 → Sales sends bundle to customer</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Customer billing record<span class="step-meta">Legal name · AP contact · invoice method · PO/AFE</span></div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Set up ACH &amp; invoice portal with customer AP</div>
+          </div>
+        </div>
 
-  START(["🟢 NEW JOB REQUEST"]):::system
+        <!-- PHASE 2 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">2</span>Work Ordered</div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Work-order capture<span class="step-meta">Well (API · AFE · legal desc) · Rig (contractor) · Dates (spud) · Site &amp; HSE · Housing · Sample plan + chain-of-custody · Offset well · GeoProg · Morning report distribution · Special requests</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Sales</div>
+            <div class="step-body">Submit work order</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Price-check vs. approved bid<span class="step-meta">Alerts on mismatch</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Ashby</div>
+            <div class="step-body">Approves mismatch (if any)</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Adds job details<span class="step-meta">Job # · unit · motel/rate · crew · mileage · transport · equipment · hotshot</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Marks ready to deploy</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Alert if start date changes<span class="step-meta">Notifies Operations</span></div>
+          </div>
+        </div>
 
-  subgraph P1["&nbsp; PHASE 1 — NEW CUSTOMER &nbsp;"]
-    direction TB
-    S1["Sales Rep: Enter CRM info<br/><i>expenses, meetings, bid prep</i>"]:::sales
-    S2["Sales Rep: Create bid<br/>in customer folder"]:::sales
-    SYS1["⚡ System alerts Ashby<br/>for bid review"]:::system
-    D1{"Ashby: Approve<br/>bid?"}:::decision
-    ADJ["Ashby + Jameson:<br/>Adjust bid"]:::ashby
-    LOCK["✅ Bid approved & locked<br/><i>Sales Rep loses edit access</i>"]:::ashby
-    SYS2["⚡ System alerts Sales Rep"]:::system
-    S3["Sales Rep: Send bid<br/>to Customer"]:::sales
-    CUST1["Customer: Approve bid"]:::customer
-    S4["Sales Rep: Mark<br/>bid complete"]:::sales
-    S5["Sales Rep: Upload MSA<br/>to system folder"]:::sales
-    SYS3["⚡ System alerts Ashby<br/>to review & sign MSA"]:::system
-    A1["Ashby: Sign MSA"]:::ashby
-    SYS4["⚡ System alerts Finance"]:::system
-    F1["Finance: Upload<br/>COI & W9"]:::finance
-    SYS5["⚡ System alerts Sales Rep<br/>MSA, COI, W9 ready"]:::system
-    S6["Sales Rep: Send docs<br/>to Customer"]:::sales
-    S7["Sales Rep: Enter all<br/>customer billing info<br/><i>Legal name, billing addr, invoice<br/>method, AP contact, PO/AFE reqs</i>"]:::sales
-    SYS6["⚡ System alerts Finance<br/>new customer ready"]:::system
-    F2["Finance: Set up ACH<br/>& invoice portal linking"]:::finance
-  end
+        <!-- PHASE 3 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">3</span>Ready to Deploy</div>
+          <div class="step-card outside">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Physically deploys loggers &amp; units to site</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Validate &amp; update work order</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Mark work order ACTIVE</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Job activation alerts<span class="step-meta">Ashby · Sales · Finance · Ops</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Creates first field ticket<span class="step-meta">Kicks off the billing cycle when job goes active</span></div>
+          </div>
+        </div>
 
-  subgraph P2["&nbsp; PHASE 2 — WORK IS ORDERED &nbsp;"]
-    direction TB
-    S8["Sales Rep: Create work order<br/><i>Well, API, AFE, rig, spud date, site<br/>constraints, HSE, samples, services+prices</i>"]:::sales
-    S9["Sales Rep: Submit<br/>work order"]:::sales
-    D2{"Prices match<br/>approved bid?"}:::decision
-    ALERT1["🚨 Alert Finance & Ashby:<br/>Price mismatch"]:::alert
-    D3{"Ashby: Approve<br/>mismatch?"}:::decision
-    SYS7["⚡ System alerts Operations<br/>to take over"]:::system
-    D4{"Start date<br/>changed?"}:::decision
-    ALERT2["🚨 Alert Operations:<br/>Date change"]:::alert
-    O1["Operations: Add job details<br/><i>Job #, unit, motel, crew,<br/>mileage, transport, equipment</i>"]:::ops
-    O2["Operations: Mark<br/>ready to deploy"]:::ops
-    SYS8["⚡ System: Add to<br/>upcoming jobs snapshot"]:::system
-  end
+        <!-- PHASE 4 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">4</span>Job Active</div>
+          <div class="step-card outside">
+            <div class="step-persona">Logger</div>
+            <div class="step-body">Captures depth / crew / services at rig</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Logger</div>
+            <div class="step-body">Reports daily activity to Operations</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Updates daily activity log in MeetBean<span class="step-meta">Repeats every day of the job</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Creates field tickets as needed<span class="step-meta">On billing cadence — pulls from daily activity log</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Scope-change approval &amp; documentation<span class="step-meta">Extra XRF · extended logging · custom analysis</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Daily revenue / cost dashboard<span class="step-meta">Running totals to Ashby + Finance</span></div>
+          </div>
+        </div>
 
-  subgraph P3["&nbsp; PHASE 3 — READY TO DEPLOY &nbsp;"]
-    direction TB
-    O3["Operations: Deploy<br/>loggers & units"]:::ops
-    O4["Operations: Validate &<br/>update work order"]:::ops
-    O5["Operations: Mark<br/>work order ACTIVE"]:::ops
-    SYS9["⚡ System alerts:<br/>Ashby, Sales Rep, Finance, Ops"]:::system
-    SYS10["⚡ System creates<br/>field ticket"]:::system
-  end
+        <!-- PHASE 5 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">5</span>Ready to TD</div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Add end-of-job info<span class="step-meta">Final motel · mileage</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Validate &amp; mark job completed</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Final accuracy check</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Marks ticket ready to sign</div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Operations</div>
+            <div class="step-body">Send ticket to rig for signature</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Logger</div>
+            <div class="step-body">Prints ticket at rig</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Customer</div>
+            <div class="step-body">Company man signs paper ticket</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Logger</div>
+            <div class="step-body">Scans &amp; returns signed ticket</div>
+          </div>
+          <div class="step-card core is-alert">
+            <div class="step-persona">Auto</div>
+            <div class="step-body"><span class="alert-icon">⏰</span>48-hour alert: TD → signed ticket</div>
+          </div>
+          <div class="step-card other">
+            <div class="step-persona">Add-on</div>
+            <div class="step-body">E-signature workflow<span class="step-meta">⤴ Alternative path — replaces the print → sign → scan steps above with digital signing + auto-ingest</span></div>
+          </div>
+        </div>
 
-  subgraph P4["&nbsp; PHASE 4 — JOB IS ACTIVE &nbsp;"]
-    direction TB
-    O6["Operations: Update field ticket<br/>DAILY<br/><i>Depth, crew names, services</i>"]:::ops
-    SYS11["⚡ System: Daily revenue/cost<br/>report to Ashby & Finance<br/><i>Running totals across all jobs</i>"]:::system
-    D5{"Scope change<br/>needed?"}:::decision
-    SC["Approve & document<br/>mid-job additions<br/><i>Extra XRF, extended logging, etc.</i>"]:::ops
-  end
+        <!-- PHASE 6 -->
+        <div class="seq-column">
+          <div class="phase-header"><span class="pn">6</span>Ticket → Invoice</div>
+          <div class="step-card core">
+            <div class="step-persona">Auto</div>
+            <div class="step-body">Export invoice data as CSV for QuickBooks<span class="step-meta">Matches QB import format — no re-keying</span></div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Imports CSV → creates invoice in QuickBooks</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Submits invoice via customer's preferred method<span class="step-meta">Customer portal · email · etc.</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Marks invoice submitted</div>
+          </div>
+          <div class="step-card core is-alert">
+            <div class="step-persona">Auto</div>
+            <div class="step-body"><span class="alert-icon">⏰</span>48-hour alert: signed → invoice</div>
+          </div>
+          <div class="step-card outside">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Tracks status until paid<span class="step-meta">Manual today — check customer portal / QB</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Updates invoice status in MeetBean<span class="step-meta">Processing · Disputed · Approved · Paid</span></div>
+          </div>
+          <div class="step-card other">
+            <div class="step-persona">Add-on</div>
+            <div class="step-body">QuickBooks integration<span class="step-meta">⤴ Alternative path — replaces the CSV export + manual portal tracking above · auto-creates invoices in QB and syncs payment status back to MeetBean</span></div>
+          </div>
+          <div class="step-card core">
+            <div class="step-persona">Finance</div>
+            <div class="step-body">Mark paid &amp; close job</div>
+          </div>
+        </div>
 
-  subgraph P5["&nbsp; PHASE 5 — JOB READY TO TD &nbsp;"]
-    direction TB
-    O7["Operations: Add end-of-job info<br/><i>Final motel, mileage calcs</i>"]:::ops
-    O8["Operations: Validate<br/>final field ticket"]:::ops
-    O9["Operations: Mark<br/>job completed"]:::ops
-    SYS12["⚡ System alerts<br/>Ashby & Finance"]:::system
-    F3["Finance: Final accuracy<br/>validation"]:::finance
-    F4["Finance: Mark<br/>ready to sign"]:::finance
-    SYS13["⚡ System alerts Ops:<br/>send ticket for signature"]:::system
-    O10["Operations: Send ticket<br/>to rig"]:::ops
-    L1["Logger: Print ticket<br/>& get Co. Man signature"]:::logger
-    CM["Company Man:<br/>Sign field ticket"]:::customer
-    L2["Logger: Scan & return<br/>signed ticket"]:::logger
-    SYS14["⚡ System alerts:<br/>Ops, Finance & Ashby"]:::system
-    SLA1["⏱️ 48-HOUR SLA<br/>TD → Signed Ticket"]:::sla
-  end
-
-  subgraph P6["&nbsp; PHASE 6 — TICKET → INVOICE &nbsp;"]
-    direction TB
-    F5["Finance: Create invoice<br/>in QuickBooks"]:::finance
-    F6["Finance: Submit invoice<br/><i>Open Invoice, Ariba, email, etc.</i>"]:::finance
-    F7["Finance: Mark<br/>invoice submitted"]:::finance
-    F8["Finance: DAILY portal<br/>status checks"]:::finance
-    D6{"Invoice<br/>status?"}:::decision
-    DISP["Finance: Resubmit<br/>disputed invoice"]:::finance
-    APPR["Invoice approved<br/>& payment received"]:::finance
-    F9["Finance: Mark paid<br/>& close job"]:::finance
-    SLA2["⏱️ 48-HOUR SLA<br/>Signed Ticket → Invoice"]:::sla
-    DONE(["✅ JOB CLOSED"]):::system
-  end
-
-  %% ===== CONNECTIONS =====
-
-  START --> S1
-
-  S1 --> S2 --> SYS1 --> D1
-  D1 -->|"No"| ADJ --> D1
-  D1 -->|"Yes"| LOCK --> SYS2 --> S3 --> CUST1 --> S4
-  S4 --> S5 --> SYS3 --> A1 --> SYS4 --> F1 --> SYS5 --> S6
-  S6 --> S7 --> SYS6 --> F2
-
-  F2 --> S8
-  S8 --> S9 --> D2
-  D2 -->|"Yes"| SYS7
-  D2 -->|"No"| ALERT1 --> D3
-  D3 -->|"Approved"| SYS7
-  D3 -->|"Denied"| S8
-  SYS7 --> D4
-  D4 -->|"Yes"| ALERT2 --> O1
-  D4 -->|"No"| O1
-  O1 --> O2 --> SYS8
-
-  SYS8 --> O3
-  O3 --> O4 --> O5 --> SYS9
-  SYS9 --> SYS10
-
-  SYS10 --> O6
-  O6 --> SYS11
-  SYS11 --> D5
-  D5 -->|"Yes"| SC --> O6
-  D5 -->|"No / Continue"| O7
-
-  O7 --> O8 --> O9 --> SYS12
-  SYS12 --> F3 --> F4 --> SYS13
-  SYS13 --> O10 --> L1 --> CM --> L2 --> SYS14
-  SLA1 -.->|"Breach → Alert<br/>Ashby, Finance, Ops"| SYS14
-
-  SYS14 --> F5
-  SLA2 -.->|"Breach → Alert<br/>Ashby & Finance"| F7
-  F5 --> F6 --> F7 --> F8 --> D6
-  D6 -->|"Disputed"| DISP --> F8
-  D6 -->|"Processing"| F8
-  D6 -->|"Approved/Paid"| APPR --> F9 --> DONE
-        </pre>
       </div>
 
-      <!-- SLA Callout -->
-      <div class="fade-in mt-8 max-w-4xl mx-auto bg-red-50 border border-red-200 rounded-2xl p-6">
-        <div class="flex items-start gap-3">
-          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+      <!-- Footnotes -->
+      <div class="fade-in text-xs text-gray-500 italic mt-4 text-center space-y-1">
+        <p>* For repeat work with an existing customer, the process skips Phase 1 and starts directly at Phase 2 (Work Ordered). Customer info is re-verified via the CRM API integration to catch changes (new AP contact, updated billing terms, etc.).</p>
+        <p>† Every <span class="not-italic font-semibold text-gray-600">AUTO</span> step also fires in-app + email notifications to the named persona.</p>
+      </div>
+
+      <!-- ALWAYS ON · CROSS-JOB BAND -->
+      <div class="fade-in mt-14 rounded-2xl border border-emerald-200 bg-gradient-to-b from-emerald-50/60 to-white p-8">
+        <div class="text-center mb-7 max-w-3xl mx-auto">
+          <p class="text-emerald-700 text-xs font-bold tracking-widest uppercase mb-2">Always on · Across every job</p>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">Reports &amp; dashboards · live the whole time</h2>
+          <p class="text-sm text-gray-600 leading-relaxed">The per-job timeline above is one slice. These dashboards run continuously across every active job — surfacing utilization, capacity, and revenue at a glance.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Equipment utilization</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">% Deployed · Available · Committed. Drill into idle units to find revenue you're leaving on the table.</p>
+            </div>
           </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-sm mb-1">48-Hour SLA Windows</h4>
-            <p class="text-gray-600 text-sm leading-relaxed">
-              Two critical SLA windows are enforced: <strong>Job TD to signed field ticket returned</strong> and <strong>signed ticket receipt to invoice submission</strong>.
-              System alerts go to Ashby, Finance, and Operations if either 48-hour window is breached.
-            </p>
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Crew availability</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">Who's free, who's on a job, who's transitioning. Staff upcoming work without spreadsheets.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Cross-job revenue + cost</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">Running totals across every active job. Daily breakdowns delivered to Ashby + Finance.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Upcoming jobs queue</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">Customer · Well · Location · Estimated start · Sales rep. Snapshot of what's ready to deploy next.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Morning report auto-send</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">Delivered automatically to the distribution list captured on the work order. Configurable frequency per job.</p>
+            </div>
+          </div>
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 text-sm mb-1">Active jobs dashboard</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">Home view: one line per active job with last-updated date · expand to walk the day-by-day activity.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Existing Customer Note -->
-      <div class="fade-in mt-4 max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-2xl p-6">
-        <div class="flex items-start gap-3">
-          <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-sm mb-1">Existing Customers</h4>
-            <p class="text-gray-600 text-sm leading-relaxed">
-              For repeat work with an existing customer, the process skips Phase 1 and starts directly at Phase 2 — Work Is Ordered.
-            </p>
-          </div>
-        </div>
-      </div>
+    </div>
+  </section>
 
+  <!-- OUTCOME STATEMENT -->
+  <section class="py-10 bg-dark-900 text-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-xs font-semibold tracking-widest uppercase text-brand-light mb-3">The bottom line</p>
+      <p class="text-xl md:text-2xl font-bold leading-snug">
+        One tool from approved bid to paid invoice — with utilization, capacity, and revenue visible across every job.
+      </p>
     </div>
   </section>
 
@@ -336,19 +524,6 @@ graph TD
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-      setTimeout(function() {
-        var svg = document.querySelector('.mermaid svg');
-        if (svg) {
-          var bbox = svg.getBBox();
-          var pad = 20;
-          svg.setAttribute('viewBox',
-            (bbox.x - pad) + ' ' + (bbox.y - pad) + ' ' +
-            (bbox.width + pad * 2) + ' ' + (bbox.height + pad * 2));
-          svg.style.width = (bbox.width + pad * 2) + 'px';
-          svg.style.height = (bbox.height + pad * 2) + 'px';
-        }
-      }, 2000);
-
       var fadeObserver = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) entry.target.classList.add('visible');
